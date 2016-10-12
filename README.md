@@ -1,5 +1,6 @@
 # TwitchMusicBot
 A twitch chat bot that can parse song requests from users and display an appropriate list of songs.
+Made by twitch.tv/mkwelemental
 Still in active development (lol)
 Planned features include:
 Support for soundcloud and youtube urls
