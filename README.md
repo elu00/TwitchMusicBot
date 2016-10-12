@@ -1,7 +1,7 @@
 # TwitchMusicBot
 A twitch chat bot that can parse song requests from users and display an appropriate list of songs.
 
-Made by twitch.tv/mkwelemental
+Made by Ethan Lu; contact me at elu@nevada.unr.edu
 
 Still in active development (lol)
 
@@ -27,4 +27,4 @@ Commands:
 
 !spot
 
-!unrequest
+!remove
