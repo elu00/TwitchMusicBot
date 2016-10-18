@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bot
+namespace Bot.Classes
 {
-    class Users
+    class SongList
     {
-        public Users(string username)
+        public void AddSong(SongRequest song)
         {
-           
+
         }
-        
+
     }
 }
