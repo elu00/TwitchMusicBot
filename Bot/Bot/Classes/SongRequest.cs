@@ -8,12 +8,9 @@ namespace Bot
 {
     class SongRequest
     {
-        private string url;
-        private string user;
         public SongRequest(string user, string url)
         {
-            this.user = user;
-            this.url = url;
+
         }
     }
 }

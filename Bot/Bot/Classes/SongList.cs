@@ -8,15 +8,23 @@ namespace Bot.Classes
 {
     class SongList
     {
-        public void AddSong(SongRequest song)
+        private List<SongRequest> list = new List<SongRequest>();
+        public bool AddSong(SongRequest song)
         {
             //implementing later
+            return true;
         }
-        public int GetSpot()
+        public bool RemoveSong(string username)
+        public string GetSpot(string username)
         {
-            //implementing later
-            return 1;
+			//implementing later
+			foreach (SongRequest user in list)
+			{
+                //iterate through list and return index is user is inside
+
+			}
+            return "lmao";
         }
-        private List<SongRequest> = new List<>;
+
     }
 }

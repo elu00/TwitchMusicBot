@@ -29,29 +29,47 @@ namespace Bot
             //Initialize List
             SongList songs = new SongList();
             //Connect to twitch IRC channel
-            TwitchClient client = new TwitchClient(new ConnectionCredentials(username, oauth), channel);
+            TwitchClient client = new TwitchClient(new ConnectionCredentials(username, oauth), channel, '!', '!');
 
             //Listen for commands
-            client.OnChatCommandReceived += (sender, e) => chatCommandReceived(sender, e, songs);
+            client.OnChatCommandReceived += (sender, e) => chatCommandReceived(sender, e, songs, client);
 
         }
         //Command implementation
-        private static void chatCommandReceived(object sender, TwitchClient.OnChatCommandReceivedArgs e, SongList songs)
+        private static void chatCommandReceived(object sender, TwitchClient.OnChatCommandReceivedArgs e, SongList songs, TwitchClient client)
         {
             string command = e.Command.Command;
-            string user = e.Command.ChatMessage.Username;
-            string url = e.Command.ArgumentsAsString;
+            string username = e.Command.ChatMessage.Username;
+            string args = e.Command.ArgumentsAsString;
             switch (command)
             {
                 case "request":
-                    SongRequest request = new SongRequest(user, url);
-                    songs.AddSong(request);
+                    SongRequest request = new SongRequest(username, args);
+                    if (songs.AddSong(request))
+                    {
+                        client.SendMessage(username + "-> Request succesfully added. Your current spot in the list is" + songs.GetSpot(username));
+                    }
+                    else
+                    {
+                        client.SendMessage(username + "-> An error occured when "); //Finish this
+                    }
                     break;
                 case "spot":
-                    songs.GetSpot(user);
+					client.SendMessage(username + "-> Your current spot in the list is"+songs.GetSpot(username));
+					break;
+                case "remove":
+                    if(songs.RemoveSong(username))
+                    {
+
+                    }
+                    else
+                    {
+
+                    }
                     break;
-                case "":
-                    break;
+				default:
+					client.SendMessage("Command not recognized");
+					break;
             }
 
         }
