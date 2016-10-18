@@ -24,7 +24,7 @@ namespace Bot
             string oauth = config.ReadLine();
             string channel = config.ReadLine();
 
-            //Make sure config is not null
+            //Make sure parameters are not null
 
             //Initialize List
             SongList songs = new SongList();
@@ -32,17 +32,27 @@ namespace Bot
             TwitchClient client = new TwitchClient(new ConnectionCredentials(username, oauth), channel);
 
             //Listen for commands
-            client.OnChatCommandReceived += new EventHandler<TwitchClient.OnChatCommandReceivedArgs>(chatCommandReceived);
-            
+            client.OnChatCommandReceived += (sender, e) => chatCommandReceived(sender, e, songs);
+
         }
         //Command implementation
-        private static void chatCommandReceived(object sender, TwitchClient.OnChatCommandReceivedArgs e)
+        private static void chatCommandReceived(object sender, TwitchClient.OnChatCommandReceivedArgs e, SongList songs)
         {
             string command = e.Command.Command;
             string user = e.Command.ChatMessage.Username;
             string url = e.Command.ArgumentsAsString;
-            SongRequest request = new SongRequest(user, url);
-
+            switch (command)
+            {
+                case "request":
+                    SongRequest request = new SongRequest(user, url);
+                    songs.AddSong(request);
+                    break;
+                case "spot":
+                    songs.GetSpot(user);
+                    break;
+                case "":
+                    break;
+            }
 
         }
     }

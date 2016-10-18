@@ -10,8 +10,13 @@ namespace Bot.Classes
     {
         public void AddSong(SongRequest song)
         {
-
+            //implementing later
         }
-
+        public int GetSpot()
+        {
+            //implementing later
+            return 1;
+        }
+        private List<SongRequest> = new List<>;
     }
 }
