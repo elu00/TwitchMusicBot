@@ -23,8 +23,10 @@ Planned features include:
 
 Commands:
 
-!request <song>
+!request \<song\>
 
 !spot
 
 !remove
+
+!list
