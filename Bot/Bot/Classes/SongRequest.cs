@@ -8,9 +8,17 @@ namespace Bot
 {
     class SongRequest
     {
+        public string username;
+        public string url;
+        public string name;
+        public string time;
+
         public SongRequest(string user, string url)
         {
-
+            this.username = user;
+            this.url = url;
+            time = DateTime.Now.ToString();
+            name = Youtube.Parse.Name(url);
         }
     }
 }

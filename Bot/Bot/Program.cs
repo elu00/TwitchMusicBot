@@ -55,7 +55,8 @@ namespace Bot
                     }
                     break;
                 case "spot":
-					client.SendMessage(username + "-> Your current spot in the list is"+songs.GetSpot(username));
+                    int spot = songs.GetSpot(username);
+					client.SendMessage(username + "-> Your current spot in the list is");
 					break;
                 case "remove":
                     if(songs.RemoveSong(username))
@@ -66,6 +67,12 @@ namespace Bot
                     {
 
                     }
+                    break;
+                case "list":
+                    client.SendMessage(songs.GetList());
+                    break;
+                case "next":
+                    client.SendMessage("");
                     break;
 				default:
 					client.SendMessage("Command not recognized");
