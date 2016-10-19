@@ -51,28 +51,36 @@ namespace Bot
                     }
                     else
                     {
-                        client.SendMessage(username + "-> An error occured when "); //Finish this
+                        client.SendMessage(username + "-> Error: you are already on the list. If you want to change your request, !change it.");
                     }
                     break;
                 case "spot":
                     int spot = songs.GetSpot(username);
+                    if(spot == -1)
+                    {
+                        client.SendMessage(username + "-> You are not currently on the list");
+                        break;
+                    }
 					client.SendMessage(username + "-> Your current spot in the list is");
 					break;
                 case "remove":
                     if(songs.RemoveSong(username))
                     {
-
+                    client.SendMessage(username + "-> Your request has been removed from the list");
                     }
                     else
                     {
-
+                        client.SendMessage(username + "-> Error: you are not currently on the list");
                     }
                     break;
                 case "list":
-                    client.SendMessage(songs.GetList());
+                    client.SendMessage(username + "->" + songs.GetList());
                     break;
                 case "next":
-                    client.SendMessage("");
+                    client.SendMessage(username + "->" + songs.Next());
+                    break;
+                case "change":
+                    client.SendMessage(username + "-> Oops, this hasn't been implemented yet");
                     break;
 				default:
 					client.SendMessage("Command not recognized");

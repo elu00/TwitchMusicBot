@@ -10,7 +10,7 @@ namespace Bot
     {
         public string username;
         public string url;
-        public string name;
+       // public string name;
         public string time;
         public string summary;
 
@@ -19,8 +19,12 @@ namespace Bot
             this.username = user;
             this.url = url;
             time = DateTime.Now.ToString();
-            name = Youtube.Parse.Name(url);
-            summary = username;
+            //name = Youtube.Parse.Name(url);
+        }
+        public string GenerateSummary()
+        {
+            summary = url + "Requested By:" + username;
+            return summary;
         }
     }
 }

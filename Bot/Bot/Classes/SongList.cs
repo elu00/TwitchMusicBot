@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,25 +29,34 @@ namespace Bot.Classes
             {
                 if (item.username == username)
                 {
-                    list.IndexOf(item);
+                    list.RemoveAt(list.IndexOf(item));
                     return true;
                 }
             }
-            return true;
+            return false;
+        }
+        public string Next()
+        {
+            /* Will be used to implement historical data/analysis to a corresponding text file
+            StreamReader rec = new StreamReader("history.txt");
+            rec.WriteLine(list[0].url)
+            */
+            list.RemoveAt(0);
+            return "Next song:" + list[0].summary;
         }
         public string GetList()
         {
+            int count = 1;
             string contents = "The list is";
             foreach (SongRequest song in list)
             {
-                contents += (song.name + "requested by" + song.username);
-                //implementing later
+                count++;
+                contents += (count + "." + song.summary);
             }
             return contents;
         }
         public int GetSpot(string username)
         {
-			//implementing later
 			foreach (SongRequest user in list)
 			{
                 //iterate through list and return index is user is inside
