@@ -16,21 +16,25 @@ namespace Bot
             //Parse original configuration from config.txt
             if (!File.Exists("config.txt"))
             {
-                Console.WriteLine("No valid configuration text file found");
+                Console.WriteLine("No valid configuration text file found, press enter to exit");
+                Console.ReadLine();
+                Environment.Exit(1);
                 //Exit procedure
             }
             StreamReader config = new StreamReader("config.txt");
             string username = config.ReadLine();
             string oauth = config.ReadLine();
             string channel = config.ReadLine();
-
+            Console.WriteLine("Configuration loaded");
             //Make sure parameters are not null
-
+            
             //Initialize List
             SongList songs = new SongList();
+            Console.WriteLine("List inititialized");
             //Connect to twitch IRC channel
-            TwitchClient client = new TwitchClient(new ConnectionCredentials(username, oauth), channel, '!', '!');
-
+            TwitchClient client = new TwitchClient(new ConnectionCredentials(username, oauth), channel);
+            Console.WriteLine("Client created. Joining channel " + channel + " with username " + username);
+            client.SendMessage("Hi");
             //Listen for commands
             client.OnChatCommandReceived += (sender, e) => chatCommandReceived(sender, e, songs, client);
 
