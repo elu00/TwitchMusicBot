@@ -17,6 +17,14 @@ Commands:
 
 !list
 
+!next
+
+!commands
+
+!change \<url\>
+
+!currentsong
+
 Most of the basic functionality has been implemented already, testing and debugging will be continuing on soon.
 
 Planned Future features include:
