@@ -29,7 +29,7 @@ Most of the basic functionality has been implemented already, testing and debugg
 
 Planned Future features include:
 
--Support for soundcloud and youtube urls
+-Support for parsing title data from soundcloud and youtube urls (coming next)
 
 -Integrating the twitch alerts API for donation tracking and priortization.
 
