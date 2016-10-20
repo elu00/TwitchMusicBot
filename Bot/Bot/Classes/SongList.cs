@@ -11,29 +11,29 @@ namespace Bot.Classes
     {
         private List<SongRequest> list = new List<SongRequest>();
         //returns true if song is succesfully added, returns false when user is already in queue
-        public bool AddSong(SongRequest song)
+        public string AddSong(SongRequest song)
         {
             foreach (SongRequest item in list)
             {
                 if(item.username==song.username)
                 {
-                    return false;
+                    return "Error: you are already on the list. If you want to change your request, !change it.";
                 }
             }
             list.Add(song);
-            return true;
+            return "Request succesfully added. Your current spot in the list is " + (list.Count-1);
         }
-        public bool RemoveSong(string username)
+        public string RemoveSong(string username)
         {
             foreach (SongRequest item in list)
             {
                 if (item.username == username)
                 {
                     list.RemoveAt(list.IndexOf(item));
-                    return true;
+                    return "Your request has been removed from the list";
                 }
             }
-            return false;
+            return "Error: you are not currently on the list";
         }
         public string Next()
         {
@@ -46,12 +46,12 @@ namespace Bot.Classes
         }
         public string GetList()
         {
-            int count = 1;
-            string contents = "The list is";
+            int count = -1;
+            string contents = "The list is ";
             foreach (SongRequest song in list)
             {
                 count++;
-                contents += (count + "." + song.summary);
+                contents += (count + ". " + song.summary + " ");
             }
             return contents;
         }
@@ -66,6 +66,36 @@ namespace Bot.Classes
                 }
 			}
             return -1;
+        }
+        public string GetCurrentSong()
+        {
+            if (list[0] == null)
+            {
+                return "The list is currently empty";
+            }
+            else
+            {
+                return "The current song is "+ list[0].summary;
+            }
+        }
+
+        public string ChangeRequest(string username, string args)
+        {
+            if (args == "")
+            {
+                return "Please specify the new URL of your request";
+            }
+            int index = -1;
+            foreach (SongRequest user in list)
+            {
+                //iterate through list and return index is user is inside
+                if (user.username == username)
+                {
+                    index = list.IndexOf(user);
+                }
+            }
+            list[index].GenerateSummary();
+            return "Your request has been sucessfully updated";
         }
 
     }

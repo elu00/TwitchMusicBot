@@ -20,11 +20,11 @@ namespace Bot
             this.url = url;
             time = DateTime.Now.ToString();
             //name = Youtube.Parse.Name(url);
+            GenerateSummary();
         }
-        public string GenerateSummary()
+        public void GenerateSummary()
         {
-            summary = url + "Requested By:" + username;
-            return summary;
+            summary = url + ", Requested By: " + username;
         }
     }
 }

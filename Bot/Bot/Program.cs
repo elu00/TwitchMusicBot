@@ -34,9 +34,6 @@ namespace Bot
 
             //Connect to twitch IRC channel
             TwitchClient client = new TwitchClient(new ConnectionCredentials(username, oauth), channel, '!', '!', true);
-
-            //Set command identifiers
-            client.AddChatCommandIdentifier('!');
             Console.WriteLine("Client created. Joining channel " + channel + " with username " + username);
             client.Connect();
 
@@ -47,6 +44,7 @@ namespace Bot
                 client.SendMessage("Bot intialized");
             };
             client.OnChatCommandReceived += (sender, e) => chatCommandReceived(sender, e, songs, client);
+            client.OnChannelStateChanged += onChannelStateChanged;
             client.ChatThrottler = new TwitchLib.Services.MessageThrottler(5, TimeSpan.FromSeconds(60));
             client.ChatThrottler.OnClientThrottled += onClientThrottled;
             client.ChatThrottler.OnThrottledPeriodReset += onThrottlePeriodReset;
@@ -60,21 +58,20 @@ namespace Bot
         //Command implementation
         public static void chatCommandReceived(object sender, TwitchClient.OnChatCommandReceivedArgs e, SongList songs, TwitchClient client)
         {
+            Console.WriteLine("Command Recieved");
             string command = e.Command.Command;
             string username = e.Command.ChatMessage.Username;
             string args = e.Command.ArgumentsAsString;
             switch (command)
             {
                 case "request":
+                    if (args == "")
+                    {
+                        client.SendMessage("Please specify the URL of your song with !song <url>");
+                        break;
+                    }
                     SongRequest request = new SongRequest(username, args);
-                    if (songs.AddSong(request))
-                    {
-                        client.SendMessage(username + "-> Request succesfully added. Your current spot in the list is" + songs.GetSpot(username));
-                    }
-                    else
-                    {
-                        client.SendMessage(username + "-> Error: you are already on the list. If you want to change your request, !change it.");
-                    }
+                        client.SendMessage(username + "-> " + songs.AddSong(request));
                     break;
                 case "spot":
                     int spot = songs.GetSpot(username);
@@ -83,26 +80,25 @@ namespace Bot
                         client.SendMessage(username + "-> You are not currently on the list");
                         break;
                     }
-					client.SendMessage(username + "-> Your current spot in the list is");
+					client.SendMessage(username + "-> Your current spot in the list is " + spot.ToString());
 					break;
                 case "remove":
-                    if(songs.RemoveSong(username))
-                    {
-                    client.SendMessage(username + "-> Your request has been removed from the list");
-                    }
-                    else
-                    {
-                        client.SendMessage(username + "-> Error: you are not currently on the list");
-                    }
+                    client.SendMessage(username + "-> " + songs.RemoveSong(username));
                     break;
                 case "list":
-                    client.SendMessage(username + "->" + songs.GetList());
+                    client.SendMessage(username + "-> " + songs.GetList());
                     break;
                 case "next":
-                    client.SendMessage(username + "->" + songs.Next());
+                    client.SendMessage(username + "-> " + songs.Next());
+                    break;
+                case "commands":
+                    client.SendMessage("Available commands are: !request <song>, !spot, !remove, !list, !next, !currentsong, !change");
                     break;
                 case "change":
-                    client.SendMessage(username + "-> Oops, this hasn't been implemented yet");
+                    client.SendMessage(username + "-> " + songs.ChangeRequest(username, args));
+                    break;
+                case "currentsong":
+                    client.SendMessage(username + "-> " + songs.GetCurrentSong());
                     break;
 				default:
 					client.SendMessage("Command not recognized");
@@ -119,6 +115,10 @@ namespace Bot
         public static void onThrottlePeriodReset(object sender, TwitchLib.Services.MessageThrottler.OnThrottlePeriodResetArgs e)
         {
             Console.WriteLine($"The message throttle period was reset.");
+        }
+        private static void onChannelStateChanged(object sender, TwitchClient.OnChannelStateChangedArgs e)
+        {
+            Console.WriteLine($"Channel: {e.Channel}\nSub only: {e.ChannelState.SubOnly}\nEmotes only: {e.ChannelState.EmoteOnly}\nSlow mode: {e.ChannelState.SlowMode}\nR9K: {e.ChannelState.R9K}");
         }
     }
 }
