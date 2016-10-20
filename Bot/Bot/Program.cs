@@ -31,16 +31,34 @@ namespace Bot
             //Initialize List
             SongList songs = new SongList();
             Console.WriteLine("List inititialized");
-            //Connect to twitch IRC channel
-            TwitchClient client = new TwitchClient(new ConnectionCredentials(username, oauth), channel);
-            Console.WriteLine("Client created. Joining channel " + channel + " with username " + username);
-            client.SendMessage("Hi");
-            //Listen for commands
-            client.OnChatCommandReceived += (sender, e) => chatCommandReceived(sender, e, songs, client);
 
+            //Connect to twitch IRC channel
+            TwitchClient client = new TwitchClient(new ConnectionCredentials(username, oauth), channel, '!', '!', true);
+
+            //Set command identifiers
+            client.AddChatCommandIdentifier('!');
+            Console.WriteLine("Client created. Joining channel " + channel + " with username " + username);
+            client.Connect();
+
+            //Listen for commands or events
+            client.OnJoinedChannel += (sender, e) =>
+            {
+                Console.WriteLine("Connected");
+                client.SendMessage("Bot intialized");
+            };
+            client.OnChatCommandReceived += (sender, e) => chatCommandReceived(sender, e, songs, client);
+            client.ChatThrottler = new TwitchLib.Services.MessageThrottler(5, TimeSpan.FromSeconds(60));
+            client.ChatThrottler.OnClientThrottled += onClientThrottled;
+            client.ChatThrottler.OnThrottledPeriodReset += onThrottlePeriodReset;
+            client.WhisperThrottler = new TwitchLib.Services.MessageThrottler(5, TimeSpan.FromSeconds(60));
+            //allow custom input
+            while (true)
+            {
+                client.SendMessage(Console.ReadLine());
+            }
         }
         //Command implementation
-        private static void chatCommandReceived(object sender, TwitchClient.OnChatCommandReceivedArgs e, SongList songs, TwitchClient client)
+        public static void chatCommandReceived(object sender, TwitchClient.OnChatCommandReceivedArgs e, SongList songs, TwitchClient client)
         {
             string command = e.Command.Command;
             string username = e.Command.ChatMessage.Username;
@@ -91,6 +109,16 @@ namespace Bot
 					break;
             }
 
+        }
+
+        public static void onClientThrottled(object sender, TwitchLib.Services.MessageThrottler.OnClientThrottledArgs e)
+        {
+            Console.WriteLine($"The message '{e.Message}' was blocked by a message throttler. Throttle period duration: {e.PeriodDuration.TotalSeconds}.\n\nMessage violation: {e.ThrottleViolation}");
+        }
+
+        public static void onThrottlePeriodReset(object sender, TwitchLib.Services.MessageThrottler.OnThrottlePeriodResetArgs e)
+        {
+            Console.WriteLine($"The message throttle period was reset.");
         }
     }
 }
