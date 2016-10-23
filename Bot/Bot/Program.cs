@@ -94,6 +94,10 @@ namespace Bot
                 case "commands":
                     client.SendMessage("Available commands are: !request <song>, !spot, !remove, !list, !next, !currentsong, !change");
                     break;
+                //specific rules for this streamer, feel free to change to suit your needs lol
+                case "rules":
+                    client.SendMessage("Song/loop must be under 90 seconds. Please try to only use youtube/soundcloud urls");
+                    break;
                 case "change":
                     client.SendMessage(username + "-> " + songs.ChangeRequest(username, args));
                     break;
