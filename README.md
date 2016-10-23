@@ -1,7 +1,7 @@
 # TwitchMusicBot
 A twitch chat bot that can parse song requests from users and display an appropriate list of songs.
 
-Current Project Status: Alpha
+Current Project Status: Beta
 
 Based heavily upon https://github.com/swiftyspiffy/TwitchLib Huge thanks to the developers of this project!
 
@@ -29,7 +29,7 @@ Most of the basic functionality has been implemented already, testing and debugg
 
 Planned Future features include:
 
--Support for soundcloud and youtube urls
+-Support for parsing title data from soundcloud and youtube urls (coming next)
 
 -Integrating the twitch alerts API for donation tracking and priortization.
 
