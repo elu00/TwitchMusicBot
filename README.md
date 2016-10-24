@@ -3,8 +3,7 @@ A twitch chat bot that can parse song requests from users and display an appropr
 
 Current Project Status: Beta
 
-Based heavily upon https://github.com/swiftyspiffy/TwitchLib Huge thanks to the developers of this project!
-
+Based heavily upon https://github.com/swiftyspiffy/TwitchLib Huge thanks to the developers of this project!  
 Developed by Ethan Lu; contact me at elu@nevada.unr.edu
 
 Commands:
@@ -18,8 +17,7 @@ Commands:
 - !change \<url\>
 - !currentsong
 
-Most of the basic functionality has been implemented already, testing and debugging will be continuing on soon.
-
+Most of the basic functionality has been implemented already, testing and debugging will be continuing on soon.  
 Planned Future features include:
 
 - Support for parsing title data from soundcloud and youtube urls (coming next)
