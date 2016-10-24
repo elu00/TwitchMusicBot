@@ -6,7 +6,7 @@ A twitch chat bot that can parse song requests from users and display an appropr
 Based heavily upon https://github.com/swiftyspiffy/TwitchLib Huge thanks to the developers of this project!  
 Developed by Ethan Lu; contact me at elu@nevada.unr.edu
 
-Commands:
+## Commands:
 
 - !request \<song\>
 - !spot
@@ -18,7 +18,8 @@ Commands:
 - !currentsong
 
 Most of the basic functionality has been implemented already, testing and debugging will be continuing on soon.  
-Planned Future features include:
+
+Planned features:
 
 - Support for parsing title data from soundcloud and youtube urls (coming next)
 - Integrating the twitch alerts API for donation tracking and priortization.
