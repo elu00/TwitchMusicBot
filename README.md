@@ -1,7 +1,7 @@
 # TwitchMusicBot
 A twitch chat bot that can parse song requests from users and display an appropriate list of songs.
 
-Current Project Status: Beta
+### Current Project Status: Beta
 
 Based heavily upon https://github.com/swiftyspiffy/TwitchLib Huge thanks to the developers of this project!  
 Developed by Ethan Lu; contact me at elu@nevada.unr.edu
