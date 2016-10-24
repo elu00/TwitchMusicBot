@@ -41,8 +41,15 @@ namespace Bot.Classes
             StreamReader rec = new StreamReader("history.txt");
             rec.WriteLine(list[0].url)
             */
-            list.RemoveAt(0);
-            return "Next song:" + list[0].summary;
+            if (list[0] == null)
+            {
+                return "The list is currently empty";
+            }
+            else
+            {
+                list.RemoveAt(0);
+                return "Next song: " + list[0].summary;
+            }
         }
         public string GetList()
         {
@@ -51,7 +58,14 @@ namespace Bot.Classes
             foreach (SongRequest song in list)
             {
                 count++;
-                contents += (count + ". " + song.summary + " ");
+                if(count==0)
+                {
+                    contents += "Currently up: " + song.summary + " ";
+                }
+                else
+                {
+                    contents += count + ". " + song.summary + " ";
+                }
             }
             return contents;
         }
@@ -94,6 +108,7 @@ namespace Bot.Classes
                     index = list.IndexOf(user);
                 }
             }
+            list[index].url = args;
             list[index].GenerateSummary();
             return "Your request has been sucessfully updated";
         }
