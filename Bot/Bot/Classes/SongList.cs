@@ -21,7 +21,7 @@ namespace Bot.Classes
                 }
             }
             list.Add(song);
-            return "Request succesfully added. Your current spot in the list is " + (list.Count-1);
+            return "Request successfully added. Your current spot in the list is " + (list.Count-1);
         }
         public string RemoveSong(string username)
         {
@@ -61,6 +61,15 @@ namespace Bot.Classes
             {
                 return "The list is currently empty";
             }
+            string contents = "The first 5 people in the list are: (Currently Up) ";
+            for (int i = 0; i < 4; i++)
+            {
+                contents += list[i].username + ", ";
+
+            }
+            return contents;
+
+            /* Retired due to Twitch's 500 character limit per character. Likely will be used in web implementation though, so it's being kept around
             int count = -1;
             string contents = "The list is ";
             foreach (SongRequest song in list)
@@ -76,6 +85,7 @@ namespace Bot.Classes
                 }
             }
             return contents;
+            */
         }
         public int GetSpot(string username)
         {

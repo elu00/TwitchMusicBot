@@ -62,12 +62,12 @@ namespace Bot
             string command = e.Command.Command;
             string username = e.Command.ChatMessage.Username;
             string args = e.Command.ArgumentsAsString;
-            switch (command)
+            switch (command.ToLower())
             {
                 case "request":
                     if (args == "")
                     {
-                        client.SendMessage("Please specify the URL of your song with !song <url>");
+                        client.SendMessage("Please specify the URL of your song with !request <url>");
                         break;
                     }
                     SongRequest request = new SongRequest(username, args);
