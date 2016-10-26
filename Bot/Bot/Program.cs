@@ -89,8 +89,17 @@ namespace Bot
                     client.SendMessage(username + "-> " + songs.GetList());
                     break;
                 case "next":
-                    client.SendMessage(username + "-> " + songs.Next());
-                    break;
+                    //hot fix - will be open to all moderators in next commit
+                    if (username.ToLower() == "rich_brown")
+                    {
+                        client.SendMessage(username + "-> " + songs.Next());
+                        break;
+                    }
+                    else
+                    {
+                        client.SendMessage(username + "-> Sorry, only the channel owner can use this command!");
+                        break;
+                    }
                 case "commands":
                     client.SendMessage("Available commands are: !request <song>, !spot, !remove, !list, !next, !currentsong, !change");
                     break;

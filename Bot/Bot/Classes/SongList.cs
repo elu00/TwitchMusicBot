@@ -48,11 +48,19 @@ namespace Bot.Classes
             else
             {
                 list.RemoveAt(0);
+                if(list[0] == null)
+                {
+                    return "That's the end of the list!";
+                }
                 return "Next song: " + list[0].summary;
             }
         }
         public string GetList()
         {
+            if(list.Count == 0)
+            {
+                return "The list is currently empty";
+            }
             int count = -1;
             string contents = "The list is ";
             foreach (SongRequest song in list)
