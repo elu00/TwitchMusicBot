@@ -9,6 +9,19 @@ using TwitchLib;
 
 namespace Bot
 {
+    //Stores all strings used for chat response/interactions for easy modification
+    struct msgs
+    {
+        public const string About = "Open source bot made by Ethan Lu, browse my source and report issues at https://github.com/elu00/TwitchMusicBot";
+        public const string EmptyRequest = "Please specify the URL of your song with !request <url>";
+        public const string NotOnList = "You are not currently on the list";
+        public const string Ping = " -> ";
+        public const string CurrentSpot = "Your current spot in the list is ";
+        public const string ModsOnly = "Sorry, only the channel moderators can use this command!";
+        public const string Rules = "Song/loop must be under 90 seconds.Please try to only use youtube/soundcloud urls";
+        public const string Commands = "Available commands are: !request <song>, !spot, !drop, !list, !next, !currentsong, !change <song>";
+        public const string UnknownCommand = "Command not recognized";
+    }
     class Program
     {
         static void Main(string[] args)
@@ -21,34 +34,43 @@ namespace Bot
                 Environment.Exit(1);
                 //Exit procedure
             }
+            //Initialization
             StreamReader config = new StreamReader("config.txt");
             string username = config.ReadLine();
             string oauth = config.ReadLine();
             string channel = config.ReadLine();
             Console.WriteLine("Configuration loaded");
-            //Make sure parameters are not null
-            
-            //Initialize List
+                      
+            //Initialize List and Mods
             SongList songs = new SongList();
             Console.WriteLine("List inititialized");
+            List<string> mods = new List<string>();
 
             //Connect to twitch IRC channel
             TwitchClient client = new TwitchClient(new ConnectionCredentials(username, oauth), channel, '!', '!', true);
             Console.WriteLine("Client created. Joining channel " + channel + " with username " + username);
-            client.Connect();
-
-            //Listen for commands or events
+            //Event and Command Handlers
             client.OnJoinedChannel += (sender, e) =>
             {
                 Console.WriteLine("Connected");
                 client.SendMessage("Bot intialized");
             };
-            client.OnChatCommandReceived += (sender, e) => chatCommandReceived(sender, e, songs, client);
+            client.OnModeratorsReceived += (sender, e) =>
+            {
+                Console.WriteLine("Mods recieved");
+                mods.AddRange(e.Moderators);
+            };
+            client.OnChatCommandReceived += (sender, e) => chatCommandReceived(sender, e, songs, mods);
             client.OnChannelStateChanged += onChannelStateChanged;
             client.ChatThrottler = new TwitchLib.Services.MessageThrottler(5, TimeSpan.FromSeconds(60));
             client.ChatThrottler.OnClientThrottled += onClientThrottled;
             client.ChatThrottler.OnThrottledPeriodReset += onThrottlePeriodReset;
             client.WhisperThrottler = new TwitchLib.Services.MessageThrottler(5, TimeSpan.FromSeconds(60));
+
+            //Connect
+            client.Connect();
+            client.GetChannelModerators();
+
             //allow custom input
             while (true)
             {
@@ -56,9 +78,10 @@ namespace Bot
             }
         }
         //Command implementation
-        public static void chatCommandReceived(object sender, TwitchClient.OnChatCommandReceivedArgs e, SongList songs, TwitchClient client)
+        public static void chatCommandReceived(object sender, TwitchClient.OnChatCommandReceivedArgs e, SongList songs, List<string> mods)
         {
             Console.WriteLine("Command Recieved");
+            TwitchClient client = sender as TwitchClient;
             string command = e.Command.Command;
             string username = e.Command.ChatMessage.Username;
             string args = e.Command.ArgumentsAsString;
@@ -67,54 +90,67 @@ namespace Bot
                 case "request":
                     if (args == "")
                     {
-                        client.SendMessage("Please specify the URL of your song with !request <url>");
+                        client.SendMessage(msgs.EmptyRequest);
                         break;
                     }
                     SongRequest request = new SongRequest(username, args);
-                        client.SendMessage(username + "-> " + songs.AddSong(request));
+                        client.SendMessage(username + msgs.Ping + songs.AddSong(request));
                     break;
                 case "spot":
                     int spot = songs.GetSpot(username);
                     if(spot == -1)
                     {
-                        client.SendMessage(username + "-> You are not currently on the list");
+                        client.SendMessage(username + msgs.Ping + msgs.NotOnList);
                         break;
                     }
-					client.SendMessage(username + "-> Your current spot in the list is " + spot.ToString());
+					client.SendMessage(username + msgs.Ping + msgs.CurrentSpot + spot.ToString());
 					break;
-                case "remove":
-                    client.SendMessage(username + "-> " + songs.RemoveSong(username));
+                case "drop":
+                    client.SendMessage(username + msgs.Ping + songs.RemoveSong(username));
                     break;
                 case "list":
-                    client.SendMessage(username + "-> " + songs.GetList());
+                    client.SendMessage(username + msgs.Ping + songs.GetList());
                     break;
+                case "commands":
+                    client.SendMessage(msgs.Commands);
+                    break;
+                case "rules":
+                    client.SendMessage(msgs.Rules);
+                    break;
+                case "change":
+                    client.SendMessage(username + msgs.Ping + songs.ChangeRequest(username, args));
+                    break;
+                case "currentsong":
+                    client.SendMessage(songs.GetCurrentSong());
+                    break;
+                case "about":
+                    client.SendMessage(msgs.About);
+                    break;
+                // Moderator restricted functions
                 case "next":
-                    //hot fix - will be open to all moderators in next commit
-                    if (username.ToLower() == "rich_brown")
+                    if (mods.Contains(username))
                     {
-                        client.SendMessage(username + "-> " + songs.Next());
+                        client.SendMessage(songs.Next());
                         break;
                     }
                     else
                     {
-                        client.SendMessage(username + "-> Sorry, only the channel owner can use this command!");
+                        client.SendMessage(username + msgs.Ping + msgs.ModsOnly);
                         break;
                     }
-                case "commands":
-                    client.SendMessage("Available commands are: !request <song>, !spot, !remove, !list, !next, !currentsong, !change");
-                    break;
-                //specific rules for this streamer, feel free to change to suit your needs lol
-                case "rules":
-                    client.SendMessage("Song/loop must be under 90 seconds. Please try to only use youtube/soundcloud urls");
-                    break;
-                case "change":
-                    client.SendMessage(username + "-> " + songs.ChangeRequest(username, args));
-                    break;
-                case "currentsong":
-                    client.SendMessage(username + "-> " + songs.GetCurrentSong());
-                    break;
-				default:
-					client.SendMessage("Command not recognized");
+                case "remove":
+                    if(mods.Contains(username))
+                    {
+                        client.SendMessage("(Mod Removal)" + args + msgs.Ping + songs.RemoveSong(args));
+                        break;
+                    }
+                    else
+                    {
+                        client.SendMessage(username + msgs.Ping + msgs.ModsOnly);
+                        break;
+                    }
+                default:
+					client.SendMessage(username + msgs.Ping+ msgs.UnknownCommand);
 					break;
             }
 

@@ -64,7 +64,7 @@ namespace Bot.Classes
             string contents = "The first 5 people in the list are: (Currently Up) ";
             for (int i = 0; i < 4; i++)
             {
-                contents += list[i].username + ", ";
+                contents += i.ToString() + ". " + list[i].username + ", ";
 
             }
             return contents;
