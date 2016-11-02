@@ -19,7 +19,7 @@ Developed by Ethan Lu; contact me at elu@nevada.unr.edu
 
 Most of the basic functionality has been implemented already, testing and debugging will be continuing on soon.  
 
-Planned features:
+## Planned features:
 
 - Support for parsing title data from soundcloud and youtube urls (coming next)
 - Integrating the twitch alerts API for donation tracking and priortization.
