@@ -1,0 +1,3 @@
+[submodule "TwitchLib"]
+	path = TwitchLib
+	url = https://github.com/swiftyspiffy/TwitchLib

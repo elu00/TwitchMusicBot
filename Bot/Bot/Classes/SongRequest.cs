@@ -11,14 +11,14 @@ namespace Bot
         public string username;
         public string url;
        // public string name;
-        public string time;
+        public DateTime time;
         public string summary;
 
         public SongRequest(string user, string url)
         {
             this.username = user;
             this.url = url;
-            time = DateTime.Now.ToString();
+            time = DateTime.Now;
             //name = Youtube.Parse.Name(url);
             GenerateSummary();
         }
