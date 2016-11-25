@@ -1,14 +1,16 @@
-﻿using Bot.Classes;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using TwitchLib;
 using TwitchLib.Models.Client;
+using TwitchBot.Classes;
 
-namespace Bot
+namespace TwitchBot
 {
     //Stores all strings used for chat response/interactions for easy modification
     struct msgs
@@ -23,9 +25,12 @@ namespace Bot
         public const string Commands = "Available commands are: !request <song>, !spot, !drop, !list, !next, !currentsong, !change <song>";
         public const string UnknownCommand = "Command not recognized";
     }
-    class Program
+    /// <summary>
+    /// Interaction logic for App.xaml
+    /// </summary>
+    public partial class App : Application
     {
-        static void Main(string[] args)
+        public App()
         {
             //Parse original configuration from config.txt
             if (!File.Exists("config.txt"))
@@ -41,7 +46,7 @@ namespace Bot
             string oauth = config.ReadLine();
             string channel = config.ReadLine();
             Console.WriteLine("Configuration loaded");
-                      
+
             //Initialize List and Mods
             SongList songs = new SongList();
             Console.WriteLine("List inititialized");
@@ -66,15 +71,9 @@ namespace Bot
             //Connect
             client.Connect();
             client.GetChannelModerators();
-
-            //allow custom input
-            while (true)
-            {
-                client.SendMessage(Console.ReadLine());
-            }
         }
         //Command implementation
-        public static void chatCommandReceived(object sender, TwitchLib.Events.Client.OnChatCommandReceivedArgs e, SongList songs, List<string> mods)
+        private static void chatCommandReceived(object sender, TwitchLib.Events.Client.OnChatCommandReceivedArgs e, SongList songs, List<string> mods)
         {
             Console.WriteLine("Command Recieved");
             TwitchClient client = sender as TwitchClient;
@@ -94,13 +93,13 @@ namespace Bot
                     break;
                 case "spot":
                     int spot = songs.GetSpot(username);
-                    if(spot == -1)
+                    if (spot == -1)
                     {
                         log(username + msgs.Ping + msgs.NotOnList, client);
                         break;
                     }
-					log(username + msgs.Ping + msgs.CurrentSpot + spot.ToString(), client);
-					break;
+                    log(username + msgs.Ping + msgs.CurrentSpot + spot.ToString(), client);
+                    break;
                 case "drop":
                     log(username + msgs.Ping + songs.RemoveSong(username), client);
                     break;
@@ -135,7 +134,7 @@ namespace Bot
                         break;
                     }
                 case "remove":
-                    if(mods.Contains(username))
+                    if (mods.Contains(username))
                     {
                         log("(Mod Removal)" + args + msgs.Ping + songs.RemoveSong(args), client);
                         break;
@@ -146,12 +145,12 @@ namespace Bot
                         break;
                     }
                 default:
-					log(username + msgs.Ping+ msgs.UnknownCommand, client);
-					break;
+                    log(username + msgs.Ping + msgs.UnknownCommand, client);
+                    break;
             }
 
         }
-        private static void log (string msg, TwitchClient client)
+        private static void log(string msg, TwitchClient client)
         {
             client.SendMessage(msg);
             // Do stuff with the GUI
