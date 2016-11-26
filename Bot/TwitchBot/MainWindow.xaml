@@ -4,8 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TwitchBot"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="TwitchMusicBot" Height="350" Width="525"
+        Title="TwitchMusicBot" Height="540" Width="960"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"
         TextElement.FontWeight="Medium"
@@ -13,6 +14,46 @@
         FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
         >
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="7*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+        <!---List Grid-->
+        <Grid Name="listGrid" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <!--Spot, Username, Song URL, Parsed Song Name, Time-->
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="20"/>
+            </Grid.ColumnDefinitions>
+        </Grid>
+        <StackPanel Grid.Column="1" Margin="10">
+            <DockPanel>
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5">Username:</TextBlock>
+                <TextBox HorizontalAlignment="Stretch" TextAlignment="Center" Name="initUsername"></TextBox>
+            </DockPanel>
+            <DockPanel>
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5">OAuth Key:</TextBlock>
+                <TextBox HorizontalAlignment="Stretch" TextAlignment="Center" Name="initOAuth"></TextBox>
+            </DockPanel>
+            <DockPanel>
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5" Name="initConnection">Connect To:</TextBlock>
+                <TextBox HorizontalAlignment="Stretch" TextAlignment="Center"></TextBox>
+            </DockPanel>
+        </StackPanel>
+        <Button Style="{StaticResource MaterialDesignFloatingActionButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="1" Margin="0 0 5 5">
+            <materialDesign:PackIcon Kind="Plus" Width="Auto" Height="Auto" />
+        </Button>
     </Grid>
 </Window>

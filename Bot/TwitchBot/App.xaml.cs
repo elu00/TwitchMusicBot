@@ -32,6 +32,7 @@ namespace TwitchBot
     {
         public App()
         {
+            /*
             //Parse original configuration from config.txt
             if (!File.Exists("config.txt"))
             {
@@ -71,6 +72,7 @@ namespace TwitchBot
             //Connect
             client.Connect();
             client.GetChannelModerators();
+            */
         }
         //Command implementation
         private static void chatCommandReceived(object sender, TwitchLib.Events.Client.OnChatCommandReceivedArgs e, SongList songs, List<string> mods)
