@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,18 @@ namespace TwitchBot.Classes
 {
     class SongList
     {
-        private List<SongRequest> list = new List<SongRequest>();
+        private ObservableCollection<SongRequest> list = new ObservableCollection<SongRequest>();
+        public ObservableCollection<SongRequest> List
+        {
+            get
+            {
+                return list;
+            }
+            protected set
+            {
+                list = value;
+            }
+        }
         //returns true if song is succesfully added, returns false when user is already in queue
         public string AddSong(SongRequest song)
         {

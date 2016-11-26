@@ -16,7 +16,7 @@ namespace TwitchBot.Classes
 
         public SongRequest(string user, string url)
         {
-            this.username = user;
+            username = user;
             this.url = url;
             time = DateTime.Now;
             //name = Youtube.Parse.Name(url);
