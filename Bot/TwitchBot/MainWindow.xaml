@@ -20,9 +20,9 @@
         </Grid.ColumnDefinitions>
         <ScrollViewer Grid.Column="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <StackPanel>
-                <DataGrid  Margin="0 8 0 0" ItemsSource="{Binding List}" CanUserSortColumns="True" CanUserAddRows="False" IsReadOnly="True" Name="SongGrid" AutoGenerateColumns="False" AlternationCount="{Binding Items.Count, RelativeSource={RelativeSource Self}}">
+                <DataGrid  Margin="0 8 0 0" ItemsSource="{Binding List}" CanUserSortColumns="False" CanUserAddRows="False" IsReadOnly="True" Name="SongGrid" AutoGenerateColumns="False" AlternationCount="{Binding Items.Count, RelativeSource={RelativeSource Self}}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Spot" Binding="{Binding AlternationIndex, RelativeSource={RelativeSource AncestorType=DataGridRow}}" CanUserSort="False" MaxWidth="70"/>
+                        <DataGridTextColumn Header="Spot" Binding="{Binding AlternationIndex, RelativeSource={RelativeSource AncestorType=DataGridRow}}" MaxWidth="70"/>
                         <DataGridTextColumn Header="Username"  Binding="{Binding Username}"/>
                         <DataGridHyperlinkColumn Header="URL" Binding="{Binding Url}" MinWidth="200"/>
                         <DataGridTextColumn Header="Time"  Binding="{Binding Time}"/>
