@@ -18,26 +18,11 @@
             <ColumnDefinition Width="7*"/>
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
-        <!---List Grid-->
-        <Grid Name="listGrid" Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <!--Spot, Username, Song URL, Parsed Song Name, Time-->
-                <ColumnDefinition Width="40"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="100"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="150"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="100"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="20"/>
-            </Grid.ColumnDefinitions>
-        </Grid>
+        <ScrollViewer Grid.Column="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <DataGrid  Margin="0 8 0 0" ItemsSource="{Binding List}" CanUserSortColumns="True" CanUserAddRows="False" IsReadOnly="True" Name="SongGrid"/>
+            </StackPanel>
+        </ScrollViewer>
         <StackPanel Grid.Column="1" Margin="10">
             <DockPanel>
                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5">Username:</TextBlock>
@@ -54,12 +39,14 @@
             <Button Style="{StaticResource MaterialDesignRaisedButton}" Margin="10" Click="Initialize_Click" Name="btnInit">
                 <TextBlock Name="initText">Connect to Twitch Servers</TextBlock>
             </Button>
+            <Button Style="{StaticResource MaterialDesignRaisedButton}" Margin="10" Click="NextSong" IsEnabled="False" Name="NextButton">
+                <TextBlock>Next Song</TextBlock>
+            </Button>
             <GroupBox Header="Log" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="16">
-                <TextBlock ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" TextWrapping="Wrap" Height="250" Name="logBox" Text="{Binding logContent}"/>
+                <ScrollViewer VerticalScrollBarVisibility="Visible">
+                    <TextBlock TextWrapping="Wrap" Height="250" Name="LogBox" Text="{Binding LogContent}"/>
+                </ScrollViewer>
             </GroupBox>
         </StackPanel>
-        <Button Style="{StaticResource MaterialDesignFloatingActionButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="1" Margin="0 0 5 5">
-            <materialDesign:PackIcon Kind="Plus" Width="Auto" Height="Auto" />
-        </Button>
     </Grid>
 </Window>
