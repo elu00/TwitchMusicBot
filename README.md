@@ -6,6 +6,12 @@ A twitch chat bot that can parse song requests from users and display an appropr
 Based heavily upon https://github.com/swiftyspiffy/TwitchLib Huge thanks to the developers of this project!  
 Developed by Ethan Lu; contact me at elu@nevada.unr.edu
 
+## Features:
+
+- Fully featured Material Design GUI built in WPF, with full display and visualization of the song list
+- Full integration into twitch chat, with all commands fully supported.
+- Mod filtering for sensitive or major commands.
+
 ## Commands:
 
 - !request \<song\>
@@ -29,3 +35,5 @@ Most of the basic functionality has been implemented already, testing and debugg
 - Moderator functions to moderate the queue
 - Server capabilities for easy visualization of the list
 
+## Credits  
+Thanks to the authors of TwitchLib and MaterialDesigninXAML!

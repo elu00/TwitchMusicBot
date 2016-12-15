@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TwitchLib;
+using TwitchLib.Models.Client;
 
 namespace Bot
 {
@@ -61,11 +62,6 @@ namespace Bot
                 mods.AddRange(e.Moderators);
             };
             client.OnChatCommandReceived += (sender, e) => chatCommandReceived(sender, e, songs, mods);
-            client.OnChannelStateChanged += onChannelStateChanged;
-            client.ChatThrottler = new TwitchLib.Services.MessageThrottler(5, TimeSpan.FromSeconds(60));
-            client.ChatThrottler.OnClientThrottled += onClientThrottled;
-            client.ChatThrottler.OnThrottledPeriodReset += onThrottlePeriodReset;
-            client.WhisperThrottler = new TwitchLib.Services.MessageThrottler(5, TimeSpan.FromSeconds(60));
 
             //Connect
             client.Connect();
@@ -78,7 +74,7 @@ namespace Bot
             }
         }
         //Command implementation
-        public static void chatCommandReceived(object sender, TwitchClient.OnChatCommandReceivedArgs e, SongList songs, List<string> mods)
+        public static void chatCommandReceived(object sender, TwitchLib.Events.Client.OnChatCommandReceivedArgs e, SongList songs, List<string> mods)
         {
             Console.WriteLine("Command Recieved");
             TwitchClient client = sender as TwitchClient;
@@ -90,84 +86,75 @@ namespace Bot
                 case "request":
                     if (args == "")
                     {
-                        client.SendMessage(msgs.EmptyRequest);
+                        log(msgs.EmptyRequest, client);
                         break;
                     }
                     SongRequest request = new SongRequest(username, args);
-                        client.SendMessage(username + msgs.Ping + songs.AddSong(request));
+                    log(username + msgs.Ping + songs.AddSong(request), client);
                     break;
                 case "spot":
                     int spot = songs.GetSpot(username);
                     if(spot == -1)
                     {
-                        client.SendMessage(username + msgs.Ping + msgs.NotOnList);
+                        log(username + msgs.Ping + msgs.NotOnList, client);
                         break;
                     }
-					client.SendMessage(username + msgs.Ping + msgs.CurrentSpot + spot.ToString());
+					log(username + msgs.Ping + msgs.CurrentSpot + spot.ToString(), client);
 					break;
                 case "drop":
-                    client.SendMessage(username + msgs.Ping + songs.RemoveSong(username));
+                    log(username + msgs.Ping + songs.RemoveSong(username), client);
                     break;
                 case "list":
-                    client.SendMessage(username + msgs.Ping + songs.GetList());
+                    log(username + msgs.Ping + songs.GetList(), client);
                     break;
                 case "commands":
-                    client.SendMessage(msgs.Commands);
+                    log(msgs.Commands, client);
                     break;
                 case "rules":
-                    client.SendMessage(msgs.Rules);
+                    log(msgs.Rules, client);
                     break;
                 case "change":
-                    client.SendMessage(username + msgs.Ping + songs.ChangeRequest(username, args));
+                    log(username + msgs.Ping + songs.ChangeRequest(username, args), client);
                     break;
                 case "currentsong":
-                    client.SendMessage(songs.GetCurrentSong());
+                    log(songs.GetCurrentSong(), client);
                     break;
                 case "about":
-                    client.SendMessage(msgs.About);
+                    log(msgs.About, client);
                     break;
                 // Moderator restricted functions
                 case "next":
                     if (mods.Contains(username))
                     {
-                        client.SendMessage(songs.Next());
+                        log(songs.Next(), client);
                         break;
                     }
                     else
                     {
-                        client.SendMessage(username + msgs.Ping + msgs.ModsOnly);
+                        log(username + msgs.Ping + msgs.ModsOnly, client);
                         break;
                     }
                 case "remove":
                     if(mods.Contains(username))
                     {
-                        client.SendMessage("(Mod Removal)" + args + msgs.Ping + songs.RemoveSong(args));
+                        log("(Mod Removal)" + args + msgs.Ping + songs.RemoveSong(args), client);
                         break;
                     }
                     else
                     {
-                        client.SendMessage(username + msgs.Ping + msgs.ModsOnly);
+                        log(username + msgs.Ping + msgs.ModsOnly, client);
                         break;
                     }
                 default:
-					client.SendMessage(username + msgs.Ping+ msgs.UnknownCommand);
+					log(username + msgs.Ping+ msgs.UnknownCommand, client);
 					break;
             }
 
         }
-
-        public static void onClientThrottled(object sender, TwitchLib.Services.MessageThrottler.OnClientThrottledArgs e)
+        private static void log (string msg, TwitchClient client)
         {
-            Console.WriteLine($"The message '{e.Message}' was blocked by a message throttler. Throttle period duration: {e.PeriodDuration.TotalSeconds}.\n\nMessage violation: {e.ThrottleViolation}");
-        }
-
-        public static void onThrottlePeriodReset(object sender, TwitchLib.Services.MessageThrottler.OnThrottlePeriodResetArgs e)
-        {
-            Console.WriteLine($"The message throttle period was reset.");
-        }
-        private static void onChannelStateChanged(object sender, TwitchClient.OnChannelStateChangedArgs e)
-        {
-            Console.WriteLine($"Channel: {e.Channel}\nSub only: {e.ChannelState.SubOnly}\nEmotes only: {e.ChannelState.EmoteOnly}\nSlow mode: {e.ChannelState.SlowMode}\nR9K: {e.ChannelState.R9K}");
+            client.SendMessage(msg);
+            // Do stuff with the GUI
         }
     }
 }

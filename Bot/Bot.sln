@@ -5,6 +5,10 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bot", "Bot\Bot.csproj", "{95DDC0C6-CC9A-452F-8247-D33CA0FBC203}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitchBot", "TwitchBot\TwitchBot.csproj", "{309AE171-8CE1-42ED-88AA-B0DE473E9EDC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitchLib", "..\TwitchLib\TwitchLib\TwitchLib.csproj", "{5D5746FD-63B3-4DB0-9389-7FEDA1A05A09}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{95DDC0C6-CC9A-452F-8247-D33CA0FBC203}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95DDC0C6-CC9A-452F-8247-D33CA0FBC203}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95DDC0C6-CC9A-452F-8247-D33CA0FBC203}.Release|Any CPU.Build.0 = Release|Any CPU
+		{309AE171-8CE1-42ED-88AA-B0DE473E9EDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{309AE171-8CE1-42ED-88AA-B0DE473E9EDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{309AE171-8CE1-42ED-88AA-B0DE473E9EDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{309AE171-8CE1-42ED-88AA-B0DE473E9EDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D5746FD-63B3-4DB0-9389-7FEDA1A05A09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D5746FD-63B3-4DB0-9389-7FEDA1A05A09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D5746FD-63B3-4DB0-9389-7FEDA1A05A09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D5746FD-63B3-4DB0-9389-7FEDA1A05A09}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
