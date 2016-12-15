@@ -53,6 +53,12 @@ namespace TwitchBot.Classes
         {
             _logContent = "List initialized \n";
         }
+        /// <summary>
+        /// Initializes the Connection to Twitch chat servers and invokes event handlers
+        /// </summary>
+        /// <param name="username">The username used to connect to chat as</param>
+        /// <param name="oauth">OAuth token for the corresponding user. "oauth:" prefix is optional.</param>
+        /// <param name="channel">The chat channel to connect to</param>
         public void initialize(string username, string oauth, string channel)
         {
             //Connect to twitch IRC channel
@@ -152,7 +158,11 @@ namespace TwitchBot.Classes
             }
 
         }
-        //returns true if song is succesfully added, returns false when user is already in queue
+        /// <summary>
+        /// Adds a SongRequest object to the lsit
+        /// </summary>
+        /// <param name="song"></param>
+        /// <returns>String denoting success/failure</returns>
         public string AddSong(SongRequest song)
         {
             foreach (SongRequest item in _list)
@@ -170,6 +180,11 @@ namespace TwitchBot.Classes
 
             return "Request successfully added. Your current spot in the list is " + (_list.Count-1);
         }
+        /// <summary>
+        /// Removes a song from the list
+        /// </summary>
+        /// <param name="username">The username corresponding to the song to be removed</param>
+        /// <returns></returns>
         public string RemoveSong(string username)
         {
             foreach (SongRequest item in _list)
@@ -185,6 +200,10 @@ namespace TwitchBot.Classes
             }
             return "Error: you are not currently on the list";
         }
+        /// <summary>
+        /// Simply advances to the next song on the list
+        /// </summary>
+        /// <returns>String coressponding to the success/failure of the operation.</returns>
         public string Next()
         {
             /* Will be used to implement historical data/analysis to a corresponding text file
@@ -208,6 +227,10 @@ namespace TwitchBot.Classes
                 return "Next song: " + _list[0].Summary;
             }
         }
+        /// <summary>
+        /// Get the current lsit
+        /// </summary>
+        /// <returns>A string containing the first 5 people on the list.</returns>
         public string GetList()
         {
             if(_list.Count == 0)
@@ -244,6 +267,11 @@ namespace TwitchBot.Classes
             return contents;
             */
         }
+        /// <summary>
+        /// Finds the spot of the user specified
+        /// </summary>
+        /// <param name="username">Username to lookup</param>
+        /// <returns> -1 if user is not in list, else returns their spot in the list</returns>
         public int GetSpot(string username)
         {
 			foreach (SongRequest user in _list)
@@ -256,6 +284,10 @@ namespace TwitchBot.Classes
 			}
             return -1;
         }
+        /// <summary>
+        /// Gets current song
+        /// </summary>
+        /// <returns>Current song name</returns>
         public string GetCurrentSong()
         {
             if (_list[0] == null)
@@ -267,10 +299,15 @@ namespace TwitchBot.Classes
                 return "The current song is "+ _list[0].Summary;
             }
         }
-
-        public string ChangeRequest(string username, string args)
+        /// <summary>
+        /// Allows user to change the URL of their request without being removed from the list
+        /// </summary>
+        /// <param name="username">Username to change the URl of</param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public string ChangeRequest(string username, string url)
         {
-            if (args == "")
+            if (url == "")
             {
                 return "Please specify the new URL of your request";
             }
@@ -285,7 +322,7 @@ namespace TwitchBot.Classes
             }
             Application.Current.Dispatcher.Invoke((Action)(() =>
             {
-            _list[index].Url = args;
+            _list[index].Url = url;
             _list[index].GenerateSummary();
             }));
             return "Your request has been sucessfully updated";
@@ -298,6 +335,11 @@ namespace TwitchBot.Classes
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+        /// <summary>
+        /// Logs messages/operations to the internal log string.
+        /// </summary>
+        /// <param name="msg">The message to add to the list</param>
+        /// <param name="chat">An optional bool that specifies whether or not the message should be sent to the Twitch Chat. True by default</param>
         public void log(string msg, bool chat = true)
         {
             if (chat)

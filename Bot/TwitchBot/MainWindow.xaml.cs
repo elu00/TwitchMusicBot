@@ -64,7 +64,7 @@ namespace TwitchBot
         }
         private void NextSong(object sender, RoutedEventArgs e)
         {
-            songs.log("(Channel Owner)" + songs.Next());
+            songs.log("Owner" + msgs.Ping + songs.Next());
         }
     }
 }
