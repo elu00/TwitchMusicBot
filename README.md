@@ -3,7 +3,7 @@ A twitch chat bot that can parse song requests from users and display an appropr
 
 ### Current Project Status: Beta
 
-Based heavily upon https://github.com/swiftyspiffy/TwitchLib Huge thanks to the developers of this project!  
+Built heavily around [TwitchLib](https://github.com/swiftyspiffy/TwitchLib) Huge thanks to the developers of this project!  
 Developed by Ethan Lu; contact me at elu@nevada.unr.edu
 
 ## Features:
@@ -36,4 +36,4 @@ Most of the basic functionality has been implemented already, testing and debugg
 - Server capabilities for easy visualization of the list
 
 ## Credits  
-Thanks to the authors of TwitchLib and MaterialDesigninXAML!
+Thanks to the authors of [TwitchLib](https://github.com/swiftyspiffy/TwitchLib) and [MaterialDesigninXAML](https://github.com/ButchersBoy/MaterialDesignInXamlToolkit)!
