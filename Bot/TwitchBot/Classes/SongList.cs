@@ -14,7 +14,7 @@ using TwitchLib.Models.Client;
 namespace TwitchBot.Classes
 {
     //Stores all strings used for chat response/interactions for easy modification
-    struct msgs
+    internal struct Msgs
     {
         public const string About = "Open source bot made by Ethan Lu, browse my source and report issues at https://github.com/elu00/TwitchMusicBot";
         public const string EmptyRequest = "Please specify the URL of your song with !request <url>";
@@ -26,10 +26,10 @@ namespace TwitchBot.Classes
         public const string Commands = "Available commands are: !request <song>, !spot, !drop, !list, !next, !currentsong, !change <song>";
         public const string UnknownCommand = "Command not recognized";
     }
-    class SongList : INotifyPropertyChanged
+    internal class SongList : INotifyPropertyChanged
     {
-        private TwitchClient client;
-        private List<string> mods = new List<string>();
+        private TwitchClient _client;
+        private List<string> _mods = new List<string>();
         private ObservableCollection<SongRequest> _list = new ObservableCollection<SongRequest>();
         public ObservableCollection<SongRequest> List
         {
@@ -59,29 +59,29 @@ namespace TwitchBot.Classes
         /// <param name="username">The username used to connect to chat as</param>
         /// <param name="oauth">OAuth token for the corresponding user. "oauth:" prefix is optional.</param>
         /// <param name="channel">The chat channel to connect to</param>
-        public void initialize(string username, string oauth, string channel)
+        public void Initialize(string username, string oauth, string channel)
         {
             //Connect to twitch IRC channel
-            client = new TwitchClient(new ConnectionCredentials(username, oauth), channel, '!', '!', true);
-            log("Client created. Joining channel " + channel + " with username " + username, false);
+            _client = new TwitchClient(new ConnectionCredentials(username, oauth), channel, '!', '!', true);
+            Log("Client created. Joining channel " + channel + " with username " + username, false);
             //Event and Command Handlers
-            client.OnJoinedChannel += (sender, e) =>
+            _client.OnJoinedChannel += (sender, e) =>
             {
-                log("Connected!", false);
-                client.SendMessage("Bot intialized");
+                Log("Connected!", false);
+                _client.SendMessage("Bot intialized");
             };
-            client.OnModeratorsReceived += (sender, e) =>
+            _client.OnModeratorsReceived += (sender, e) =>
             {
-                log("Mods recieved", false);
-                mods.AddRange(e.Moderators);
+                Log("Mods recieved", false);
+                _mods.AddRange(e.Moderators);
             };
-            client.OnChatCommandReceived += chatCommandReceived;
+            _client.OnChatCommandReceived += ChatCommandReceived;
 
             //Connect
-            client.Connect();
-            client.GetChannelModerators();
+            _client.Connect();
+            _client.GetChannelModerators();
         }
-        private void chatCommandReceived(object sender, TwitchLib.Events.Client.OnChatCommandReceivedArgs e)
+        private void ChatCommandReceived(object sender, TwitchLib.Events.Client.OnChatCommandReceivedArgs e)
         {
             Console.WriteLine("Command Recieved");
             TwitchClient client = sender as TwitchClient;
@@ -93,67 +93,67 @@ namespace TwitchBot.Classes
                 case "request":
                     if (args == "")
                     {
-                        log(msgs.EmptyRequest);
+                        Log(Msgs.EmptyRequest);
                         break;
                     }
                     SongRequest request = new SongRequest(username, args);
-                    log(username + msgs.Ping + AddSong(request));
+                    Log(username + Msgs.Ping + AddSong(request));
                     break;
                 case "spot":
                     int spot = GetSpot(username);
                     if (spot == -1)
                     {
-                        log(username + msgs.Ping + msgs.NotOnList);
+                        Log(username + Msgs.Ping + Msgs.NotOnList);
                         break;
                     }
-                    log(username + msgs.Ping + msgs.CurrentSpot + spot.ToString());
+                    Log(username + Msgs.Ping + Msgs.CurrentSpot + spot.ToString());
                     break;
                 case "drop":
-                    log(username + msgs.Ping + RemoveSong(username));
+                    Log(username + Msgs.Ping + RemoveSong(username));
                     break;
                 case "list":
-                    log(username + msgs.Ping + GetList());
+                    Log(username + Msgs.Ping + GetList());
                     break;
                 case "commands":
-                    log(msgs.Commands);
+                    Log(Msgs.Commands);
                     break;
                 case "rules":
-                    log(msgs.Rules);
+                    Log(Msgs.Rules);
                     break;
                 case "change":
-                    log(username + msgs.Ping + ChangeRequest(username, args));
+                    Log(username + Msgs.Ping + ChangeRequest(username, args));
                     break;
                 case "currentsong":
-                    log(GetCurrentSong());
+                    Log(GetCurrentSong());
                     break;
                 case "about":
-                    log(msgs.About);
+                    Log(Msgs.About);
                     break;
                 // Moderator restricted functions
                 case "next":
-                    if (mods.Contains(username))
+                    if (_mods.Contains(username))
                     {
-                        log(Next());
+                        Log(Next());
                         break;
                     }
                     else
                     {
-                        log(username + msgs.Ping + msgs.ModsOnly);
+                        Log(username + Msgs.Ping + Msgs.ModsOnly);
                         break;
                     }
                 case "remove":
-                    if (mods.Contains(username))
+                    if (_mods.Contains(username))
                     {
-                        log("(Mod Removal)" + args + msgs.Ping + RemoveSong(args));
+                        Log("(Mod Removal)" + args + Msgs.Ping + RemoveSong(args));
                         break;
                     }
                     else
                     {
-                        log(username + msgs.Ping + msgs.ModsOnly);
+                        Log(username + Msgs.Ping + Msgs.ModsOnly);
                         break;
                     }
                 default:
-                    log(username + msgs.Ping + msgs.UnknownCommand);
+                    Log(username + Msgs.Ping + Msgs.UnknownCommand);
                     break;
             }
 
@@ -165,12 +165,9 @@ namespace TwitchBot.Classes
         /// <returns>String denoting success/failure</returns>
         public string AddSong(SongRequest song)
         {
-            foreach (SongRequest item in _list)
+            if (_list.Any(item => item.Username==song.Username))
             {
-                if(item.Username==song.Username)
-                {
-                    return "Error: you are already on the list. If you want to change your request, !change it.";
-                }
+                return "Error: you are already on the list. If you want to change your request, !change it.";
             }
 
             Application.Current.Dispatcher.Invoke((Action)(() =>
@@ -303,7 +300,7 @@ namespace TwitchBot.Classes
         /// Allows user to change the URL of their request without being removed from the list
         /// </summary>
         /// <param name="username">Username to change the URl of</param>
-        /// <param name="args"></param>
+        /// <param name="url"></param>
         /// <returns></returns>
         public string ChangeRequest(string username, string url)
         {
@@ -340,11 +337,11 @@ namespace TwitchBot.Classes
         /// </summary>
         /// <param name="msg">The message to add to the list</param>
         /// <param name="chat">An optional bool that specifies whether or not the message should be sent to the Twitch Chat. True by default</param>
-        public void log(string msg, bool chat = true)
+        public void Log(string msg, bool chat = true)
         {
             if (chat)
             {
-                client.SendMessage(msg);
+                _client.SendMessage(msg);
             }
             _logContent += (msg + "\n");
             NotifyPropertyChanged("LogContent");

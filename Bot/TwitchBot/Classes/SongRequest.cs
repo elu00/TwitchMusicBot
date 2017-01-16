@@ -12,7 +12,7 @@ namespace TwitchBot.Classes
         private string _username;
         private string _url;
         private DateTime _time;
-        public string _summary;
+        private string _summary;
 
         public string Username
         {

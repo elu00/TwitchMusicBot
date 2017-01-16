@@ -39,14 +39,14 @@ namespace TwitchBot
                 initUsername.Text = config.ReadLine();
                 initOAuth.Text = config.ReadLine();
                 initConnection.Text = config.ReadLine();
-                songs.log("Configuration loaded", false);
+                songs.Log("Configuration loaded", false);
             }
             //Setup Databinding
             SongGrid.DataContext = songs;
             LogBox.DataContext = songs;
         }
         
-        private void disableInitTextBoxes()
+        private void DisableInitTextBoxes()
         {
             initUsername.IsEnabled = false;
             initOAuth.IsEnabled = false;
@@ -56,15 +56,15 @@ namespace TwitchBot
         //Event Handling
         private void Initialize_Click(object sender, RoutedEventArgs e)
         {
-            disableInitTextBoxes();
+            DisableInitTextBoxes();
             initText.Text = "Connecting....";
-            songs.initialize(initUsername.Text, initOAuth.Text, initConnection.Text);
+            songs.Initialize(initUsername.Text, initOAuth.Text, initConnection.Text);
             initText.Text = "Connected!";
             NextButton.IsEnabled = true;
         }
         private void NextSong(object sender, RoutedEventArgs e)
         {
-            songs.log("Owner" + msgs.Ping + songs.Next());
+            songs.Log("Owner" + Msgs.Ping + songs.Next());
         }
     }
 }
