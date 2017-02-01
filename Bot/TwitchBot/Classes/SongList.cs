@@ -17,13 +17,13 @@ namespace TwitchBot.Classes
     internal struct Msgs
     {
         public const string About = "Open source bot made by Ethan Lu, browse my source and report issues at https://github.com/elu00/TwitchMusicBot";
-        public const string EmptyRequest = "Please specify the URL of your song with !request <url>";
+        public const string EmptyRequest = "Please specify the URL of your song with !request <song url> (without brackets)";
         public const string NotOnList = "You are not currently on the list";
         public const string Ping = " -> ";
         public const string CurrentSpot = "Your current spot in the list is ";
         public const string ModsOnly = "Sorry, only the channel moderators can use this command!";
         public const string Rules = "Song/loop must be under 90 seconds.Please try to only use youtube/soundcloud urls";
-        public const string Commands = "Available commands are: !request <song>, !spot, !drop, !list, !next, !currentsong, !change <song>";
+        public const string Commands = "Available commands are: !request <song url>, !spot, !drop, !list, !next, !currentsong, !change <song url>";
         public const string UnknownCommand = "Command not recognized";
     }
     internal class SongList : INotifyPropertyChanged
@@ -83,8 +83,7 @@ namespace TwitchBot.Classes
         }
         private void ChatCommandReceived(object sender, TwitchLib.Events.Client.OnChatCommandReceivedArgs e)
         {
-            Console.WriteLine("Command Recieved");
-            TwitchClient client = sender as TwitchClient;
+            Console.WriteLine(@"Command Recieved");
             string command = e.Command.Command;
             string username = e.Command.ChatMessage.Username;
             string args = e.Command.ArgumentsAsString;
@@ -245,24 +244,20 @@ namespace TwitchBot.Classes
 
             }
             return contents;
-
-            /* Retired due to Twitch's 500 character limit per character. Likely will be used in web implementation though, so it's being kept around
-            int count = -1;
-            string contents = "The _list is ";
-            foreach (SongRequest song in _list)
+        }
+        /// <summary>
+        /// Backups all current song requests to archive.txt
+        /// </summary>
+        /// <returns></returns>
+        public void ArchiveList()
+        {
+            using (StreamWriter file = new StreamWriter(@"archive.txt", true))
             {
-                count++;
-                if(count==0)
+                foreach (SongRequest song in _list)
                 {
-                    contents += "Currently up: " + song.summary + " ";
-                }
-                else
-                {
-                    contents += count + ". " + song.summary + " ";
+                    file.WriteLine(song.Username + song.Url);
                 }
             }
-            return contents;
-            */
         }
         /// <summary>
         /// Finds the spot of the user specified
@@ -327,10 +322,7 @@ namespace TwitchBot.Classes
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string propertyName)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         /// <summary>
         /// Logs messages/operations to the internal log string.

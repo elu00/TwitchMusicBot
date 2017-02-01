@@ -66,5 +66,10 @@ namespace TwitchBot
         {
             songs.Log("Owner" + Msgs.Ping + songs.Next());
         }
+
+        private void ArchiveList(object sender, RoutedEventArgs e)
+        {
+            songs.ArchiveList();
+        }
     }
 }

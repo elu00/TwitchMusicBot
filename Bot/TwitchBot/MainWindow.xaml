@@ -49,6 +49,9 @@
             <Button Style="{StaticResource MaterialDesignRaisedButton}" Margin="10" Click="NextSong" IsEnabled="False" Name="NextButton">
                 <TextBlock>Next Song</TextBlock>
             </Button>
+            <Button Style="{StaticResource MaterialDesignRaisedButton}" Margin="10" Click="ArchiveList">
+                <TextBlock>Archive List</TextBlock>
+            </Button>
             <GroupBox Header="Log" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="16">
                 <ScrollViewer VerticalScrollBarVisibility="Visible">
                     <TextBlock TextWrapping="Wrap" Height="250" Name="LogBox" Text="{Binding LogContent}"/>

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace TwitchBot.Classes
 {
+    [Serializable()]
     class SongRequest : INotifyPropertyChanged
     {
         private string _username;
@@ -85,10 +86,7 @@ namespace TwitchBot.Classes
 
         private void NotifyPropertyChanged(string propertyName)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
