@@ -30,6 +30,7 @@ namespace TwitchBot.Classes
     {
         private TwitchClient _client;
         private List<string> _mods = new List<string>();
+        public bool IsOpen { get; protected set; }
         private ObservableCollection<SongRequest> _list = new ObservableCollection<SongRequest>();
         public ObservableCollection<SongRequest> List
         {
@@ -80,6 +81,7 @@ namespace TwitchBot.Classes
             //Connect
             _client.Connect();
             _client.GetChannelModerators();
+            IsOpen = true;
         }
         private void ChatCommandReceived(object sender, TwitchLib.Events.Client.OnChatCommandReceivedArgs e)
         {
@@ -130,7 +132,7 @@ namespace TwitchBot.Classes
                     break;
                 // Moderator restricted functions
                 case "next":
-                    if (_mods.Contains(username))
+                    if (_mods.Contains(username) | _client.JoinedChannels[0].Channel == username)
                     {
                         Log(Next());
                         break;
@@ -141,7 +143,7 @@ namespace TwitchBot.Classes
                         break;
                     }
                 case "remove":
-                    if (_mods.Contains(username))
+                    if (_mods.Contains(username) | _client.JoinedChannels[0].Channel == username)
                     {
                         Log("(Mod Removal)" + args + Msgs.Ping + RemoveSong(args));
                         break;
@@ -318,6 +320,11 @@ namespace TwitchBot.Classes
             _list[index].GenerateSummary();
             }));
             return "Your request has been sucessfully updated";
+        }
+
+        public void CloseList()
+        {
+            
         }
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string propertyName)
