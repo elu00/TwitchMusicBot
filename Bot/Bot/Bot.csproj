@@ -52,12 +52,6 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\TwitchLib\TwitchLib\TwitchLib.csproj">
-      <Project>{5d5746fd-63b3-4db0-9389-7feda1a05a09}</Project>
-      <Name>TwitchLib</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

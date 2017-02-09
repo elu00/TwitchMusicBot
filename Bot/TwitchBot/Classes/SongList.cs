@@ -236,7 +236,7 @@ namespace TwitchBot.Classes
                 return "The list is currently empty";
             }
             string contents = "The first 5 people in the list are: (Currently Up) ";
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i <= 5; i++)
             {
                 if(_list.Count == i)
                 {
