@@ -1,7 +1,7 @@
 # TwitchMusicBot
 A twitch chat bot that can parse song requests from users and display an appropriate list of songs.
 
-### Current Project Status: Beta
+### Current Project Status: Stable v1.0 released, semi-active
 
 Built heavily around [TwitchLib](https://github.com/swiftyspiffy/TwitchLib) Huge thanks to the developers of this project!  
 Developed by Ethan Lu; contact me at elu@nevada.unr.edu
@@ -23,7 +23,7 @@ Developed by Ethan Lu; contact me at elu@nevada.unr.edu
 - !change \<url\>
 - !currentsong
 
-Most of the basic functionality has been implemented already, testing and debugging will be continuing on soon.  
+Base functionality and WPF application 
 
 ## Planned features:
 
@@ -34,6 +34,7 @@ Most of the basic functionality has been implemented already, testing and debugg
 - Recording video length and performance length for various analytics (JSON or XML format?)
 - Moderator functions to moderate the queue
 - Server capabilities for easy visualization of the list (Through ASP.net, will be difficult to implement)
-
+## Known Issues
+- Scrollviewer for the log is currently non-functional. 
 ## Credits  
 Thanks to the authors of [TwitchLib](https://github.com/swiftyspiffy/TwitchLib) and [MaterialDesigninXAML](https://github.com/ButchersBoy/MaterialDesignInXamlToolkit)!
