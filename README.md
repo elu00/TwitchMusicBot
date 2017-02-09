@@ -23,7 +23,6 @@ Developed by Ethan Lu; contact me at elu@nevada.unr.edu
 - !change \<url\>
 - !currentsong
 
-Base functionality and WPF application 
 
 ## Planned features:
 
@@ -36,5 +35,6 @@ Base functionality and WPF application
 - Server capabilities for easy visualization of the list (Through ASP.net, will be difficult to implement)
 ## Known Issues
 - Scrollviewer for the log is currently non-functional. 
+
 ## Credits  
 Thanks to the authors of [TwitchLib](https://github.com/swiftyspiffy/TwitchLib) and [MaterialDesigninXAML](https://github.com/ButchersBoy/MaterialDesignInXamlToolkit)!
