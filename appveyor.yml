@@ -1,8 +1,19 @@
 version: 1.0.{build}
+
+before_build:
+
+- cmd: nuget restore
+
 build:
+
   project: /Bot/Bot.sln
+
   verbosity: minimal
+
 deploy:
+
 - provider: GitHub
+
   auth_token:
+
     secure: pRLSVHzWSIzAa3Qx4+h9jyPYS0Tq8+txydk8jhRd2NN8RlK5reRKQ+MoBLJDKtPr
